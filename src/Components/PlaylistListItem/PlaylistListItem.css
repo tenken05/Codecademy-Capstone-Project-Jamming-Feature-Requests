@@ -1,0 +1,42 @@
+.Playlist-list-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(256, 256, 256, 0.8);
+    display: flex;
+    box-sizing: border-box;
+    padding-bottom: .3rem;
+    padding-top: .3rem;   
+
+  }
+  
+  
+  
+  .Playlist-list-item-information {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 72px;
+    box-sizing: border-box;
+    float: left;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+  }
+  
+  .Playlist-list-item-information h3 {
+    margin-bottom: .22rem;
+    box-sizing: border-box;
+    margin-top: .22rem;
+    overflow-wrap: break-word;
+  }
+  
+  .Playlist-list-item-information p {
+    font-size: .83rem;
+    font-weight: 300;
+    color: rgba(256, 256, 256, 0.8);
+    box-sizing: border-box;
+    margin: .22rem;
+    overflow-wrap: break-word;
+    
+  }
