@@ -1,6 +1,6 @@
 
 let accessToken;
-const clientId = 'c5ed1816476144f4951b09ae6e2d96b2';
+const clientId = '9c5115646c68404f9fcfa89e220c651f';
 const redirectUri = "http://localhost:3000";
 let userId;
 
@@ -50,16 +50,16 @@ const Spotify = {
 //This is the function in question.  I'm trying to check if the userId has been set by a previous call to this function, if it is already set,
 // then I'm trying to set user Id to the jsonResponse.id and use it .
     getCurrentUserId() {
-        if (!userId)   {        
-        const accessToken = Spotify.getAccessToken();
-        const headers = { Authorization: `Bearer ${accessToken}` };
-
-        return fetch(`https://api.spotify.com/v1/me`, { headers: headers }
-        ).then(response => response.json()
-        ).then(jsonResponse => {
-            jsonResponse.id = userId;})} else {
-                return userId;
-            }
+        
+        let accessToken = Spotify.getAccessToken();
+        return fetch(`https://api.spotify.com/v1/me`, { 
+            headers: { Authorization: `Bearer ${accessToken}`}
+        }).then(response => {
+            return response.json()
+        }).then(jsonResponse => {
+            jsonResponse.id = userId;
+        })
+           
 },
 
     savePlaylist(name, trackUris) {
@@ -101,8 +101,8 @@ const Spotify = {
                
         const accessToken = Spotify.getAccessToken();
         const headers = { Authorization: `Bearer ${accessToken}` };
-        // const userId = Spotify.getCurrentUserId();
-      //This next portion is what i'm trying to replace with the function above...but won't work no matter what I do.       
+        // let userId = Spotify.getCurrentUserId();
+    //   This next portion is what i'm trying to replace with the function above...but won't work no matter what I do.       
         return fetch(`https://api.spotify.com/v1/me`, { headers: headers }
         ).then(response => response.json()
         ).then(jsonResponse => {
@@ -116,17 +116,46 @@ const Spotify = {
         ).then(jsonResponse => {
             
                 return jsonResponse.items.map(playlist => ({
-                    playlist: playlist.list,
+                    
                     name: playlist.name,
                     id: playlist.id,
-                    images: playlist.images,
-                    tracks: playlist.tracks,
-                    owner: playlist.owner
+                    
                     
                 }));
         })
-    }) 
+        }) 
+    },
+
+    getPlaylist(id){
+      if (!id){
+          return;
+      }
+
+        const accessToken = Spotify.getAccessToken();
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        return fetch(`https://api.spotify.com/v1/me`, { headers: headers }
+        ).then(response => response.json()
+        ).then(jsonResponse => {
+           userId = jsonResponse.id ;
+           return fetch (`https://api.spotify.com/v1/users/${userId}/playlists/${id}/tracks`, { headers: headers}
+           ).then(response => response.json()
+           ).then(jsonResponse => {
+               return jsonResponse.tracks.items.map(track => ({
+                id: track.id,
+                name: track.name, 
+                artist: track.artists[0].name,
+                album: track.album.name,
+                uri: track.uri 
+
+               }))
+                
+           }) 
+
+        })
+
     }
+
 }
 
 export default Spotify;

@@ -13,9 +13,10 @@ class PlaylistList extends React.Component {
         return(
             <div className="Playlist-list">
                 <h2>Local Playlists</h2>
-                { this.props.playlists.map(list =>{
+                { this.props.currentPlaylists.map(list =>{
                     return <PlaylistListItem list={list}
-                                                key={list.id}/>
+                                                key={list.id}
+                                                onSelect={this.props.onSelect}/>
                 })}
 
 

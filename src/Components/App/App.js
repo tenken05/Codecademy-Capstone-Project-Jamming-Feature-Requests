@@ -19,9 +19,10 @@ class App extends React.Component {
       playlistTracks: [],
       PlaylistListName: 'Take this from Spotify',
       playlistListTracks: [],
-      playlists: [{
+      currentPlaylists: [{
         name: '',
-        id: ''
+        id: '',
+        
       }]
       
     };
@@ -31,11 +32,12 @@ class App extends React.Component {
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
+    this.selectPlaylist = this.selectPlaylist.bind(this);
   }
   componentWillMount() {
            
     Spotify.getUserPlaylists().then(playlists =>{
-      this.setState( { playlists: playlists })
+      this.setState( { currentPlaylists: playlists })
     })
 }
  
@@ -79,8 +81,17 @@ class App extends React.Component {
     });
   }
 
+  selectPlaylist(id) {
+    const playlistName = this.state.playlists.map(playlist => playlist.id);
+    Spotify.getPlaylist(id).then(tracks => {
+      this.setState({ 
+        playlistName: playlistName,
+        playlistTracks: tracks })
+    })
+    
+  }
 
-
+  
   render() {
     return(
       <div>
@@ -96,7 +107,9 @@ class App extends React.Component {
                         onNameChange={this.updatePlaylistName}
                         onSave={this.savePlaylist} />
      <div className="App-playlist-list">
-        <PlaylistList  playlists={this.state.playlists} />
+        <PlaylistList  currentPlaylists={this.state.currentPlaylists} 
+                       onSelect={this.state.selectPlaylist}
+                       tracks={this.state.playlistTracks}/>
      </div>
      </div>
      </div>
